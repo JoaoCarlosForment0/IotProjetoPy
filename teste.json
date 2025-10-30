@@ -1,0 +1,14 @@
+{
+    "nome": "jardel",
+    "idade": 18,
+    "genero": "Homem",
+    "atividade_fisica": {
+            "faz": "sim",
+            "vez_mes": 5,
+            "tipo": "academia"
+        },
+    "horas_sono": 8,
+    "fuma": "sim",
+    "bebe_alcool": "sim",
+    "medico_anual": "sim"
+}

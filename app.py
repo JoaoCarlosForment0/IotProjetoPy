@@ -2,10 +2,14 @@ import os
 import requests
 from flask import Flask, jsonify, request
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 load_dotenv()
 
 app = Flask(__name__)
+
+CORS(app, origins=["http://localhost:5173"])
+
 
 TOKEN = os.getenv("HF_API_TOKEN")
 HF_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
@@ -14,6 +18,13 @@ headers = {
     'Content-Type': 'application/json',
     'x-goog-api-key': TOKEN
 }
+
+@app.route("/", methods=["POST"])
+def teste():
+    dados = request.get_json()
+    print(dados)
+    print(dados["nome"])
+    return jsonify({"mensagem": "recebido"})
 
 @app.route("/chat", methods=["POST"])
 def chat():

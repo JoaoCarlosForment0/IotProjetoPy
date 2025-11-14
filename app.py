@@ -1,6 +1,7 @@
 import os
 import requests
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file
+import io
 from dotenv import load_dotenv
 from flask_cors import CORS
 
@@ -13,22 +14,16 @@ CORS(app, origins=["http://localhost:5173"])
 
 TOKEN = os.getenv("HF_API_TOKEN")
 HF_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
-
 headers = {
     'Content-Type': 'application/json',
     'x-goog-api-key': TOKEN
 }
 
 @app.route("/", methods=["POST"])
-def teste():
-    dados = request.get_json()
-    print(dados)
-    print(dados["nome"])
-    return jsonify({"mensagem": "recebido"})
-
-@app.route("/chat", methods=["POST"])
 def chat():
-    user_input = request.json.get('prompt')
+    dados = request.get_json()
+    user_input = f"Estou fazendo um projeto para a minha escola, preciso que você receba informações de uma pessoa ficticia e forneça um texto simples explicando um tipo de rotina mais saudavel com as informações que receber, as informações são as seguintes: Nome {dados["nome"]}, Idade: {dados["idade"]}, Genero: {dados["genero"]}, Faz atividade fisica: {dados["atividade_fisica"]["faz"]}, {dados["atividade_fisica"]["vezMes"]} vezes por mês  tipo: {dados["atividade_fisica"]["tipo"]}, Tem {dados["horasSono"]}h de sono por dia, fuma: {dados["fuma"]}, bebe alcool: {dados["bebeAlcool"]}, vai no medico frequentemente: {dados["medicoAnual"]}"
+    print(user_input)
     if not user_input:
         return jsonify({'Error': 'prompt obrigatorio'}), 400
     

@@ -4,6 +4,7 @@ from flask import Flask, jsonify, request, send_file
 import io
 from dotenv import load_dotenv
 from flask_cors import CORS
+from fpdf import FPDF
 
 load_dotenv()
 
@@ -55,9 +56,16 @@ def chat():
                 if "content" in ai_response["candidates"][0]
                 else ai_response["candidates"][0]["output"]
             )
-        except Exception:
             answer = ai_response.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
-        return jsonify({'response': answer})
+            pdf = FPDF()
+            pdf.add_page()
+            pdf.set_font('Arial', 'B', 11)
+            pdf.multi_cell(190, 5, answer)
+            pdf.output('teste.pdf')
+            return send_file("teste.pdf", as_attachment=False)
+        except Exception:
+            print("erro")
+        return "erro"
     else:
         return jsonify({'error': 'erro ao acessar api', "detalhe": response.text}), 500
 
